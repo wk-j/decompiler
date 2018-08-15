@@ -21,7 +21,6 @@ class Processor {
     private IEnumerable<MetadataReference> GetReferences() {
         var asm = typeof(Processor).Assembly;
         var refs = AppDomain.CurrentDomain.GetAssemblies().Select(x => {
-            // Console.WriteLine(x.Location);
             return MetadataReference.CreateFromFile(x.Location);
         });
         return refs;
@@ -29,7 +28,8 @@ class Processor {
 
     private CSharpCompilation CompileTree(Microsoft.CodeAnalysis.SyntaxTree tree) {
         var references = new MetadataReference[] {
-            MetadataReference.CreateFromFile(typeof(Console).Assembly.Location)
+            MetadataReference.CreateFromFile(typeof(Object).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
         };
 
         var all = references.Concat(GetReferences());
@@ -48,11 +48,8 @@ class Processor {
             var result = compile.Emit(memory);
             if (!result.Success) {
                 foreach (var item in result.Diagnostics.Where(x => x.Severity == DiagnosticSeverity.Error)) {
-                    Console.WriteLine($"! {item}");
+                    Console.WriteLine($"  ! {item}");
                 }
-
-                var k = typeof(Console).Assembly.Location;
-                Console.WriteLine(k);
                 return (false, "");
             } else {
                 var file = filePath;
