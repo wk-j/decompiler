@@ -1,0 +1,39 @@
+.class private auto ansi '<Module>'
+{
+} // end of class <Module>
+
+.class private auto ansi beforefieldinit Program
+    extends [System.Private.CoreLib]System.Object
+{
+    // Methods
+    .method public hidebysig static 
+        void Main (
+            string[] args
+        ) cil managed 
+    {
+        // Method begins at RVA 0x2050
+        // Code size 13 (0xd)
+        .maxstack 8
+
+        IL_0000: nop
+        IL_0001: ldstr "Hello, world!"
+        IL_0006: call void [System.Console]System.Console::WriteLine(string)
+        IL_000b: nop
+        IL_000c: ret
+    } // end of method Program::Main
+
+    .method public hidebysig specialname rtspecialname 
+        instance void .ctor () cil managed 
+    {
+        // Method begins at RVA 0x205e
+        // Code size 8 (0x8)
+        .maxstack 8
+
+        IL_0000: ldarg.0
+        IL_0001: call instance void [System.Private.CoreLib]System.Object::.ctor()
+        IL_0006: nop
+        IL_0007: ret
+    } // end of method Program::.ctor
+
+} // end of class Program
+
