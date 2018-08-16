@@ -6,6 +6,36 @@
     extends [System.Private.CoreLib]System.Object
 {
     // Nested Types
+    .class nested public auto ansi beforefieldinit P
+        extends [System.Private.CoreLib]System.Object
+    {
+        // Methods
+        .method private hidebysig 
+            instance void Main () cil managed 
+        {
+            // Method begins at RVA 0x20a6
+            // Code size 11 (0xb)
+            .maxstack 8
+
+            IL_0000: ldstr "Hello"
+            IL_0005: call void [System.Console]System.Console::WriteLine(string)
+            IL_000a: ret
+        } // end of method P::Main
+
+        .method public hidebysig specialname rtspecialname 
+            instance void .ctor () cil managed 
+        {
+            // Method begins at RVA 0x20b2
+            // Code size 7 (0x7)
+            .maxstack 8
+
+            IL_0000: ldarg.0
+            IL_0001: call instance void [System.Private.CoreLib]System.Object::.ctor()
+            IL_0006: ret
+        } // end of method P::.ctor
+
+    } // end of class P
+
     .class nested public auto ansi sealed beforefieldinit '<<Initialize>>d__0'
         extends [System.Private.CoreLib]System.ValueType
         implements [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine
@@ -19,7 +49,7 @@
             instance void MoveNext () cil managed 
         {
             .override method instance void [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine::MoveNext()
-            // Method begins at RVA 0x20a8
+            // Method begins at RVA 0x20bc
             // Code size 58 (0x3a)
             .maxstack 2
             .locals init (
@@ -68,7 +98,7 @@
                 01 00 00 00
             )
             .override method instance void [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine::SetStateMachine(class [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine)
-            // Method begins at RVA 0x2100
+            // Method begins at RVA 0x2114
             // Code size 13 (0xd)
             .maxstack 8
 
@@ -138,6 +168,7 @@
         // Method begins at RVA 0x2099
         // Code size 12 (0xc)
         .maxstack 8
+        .entrypoint
 
         IL_0000: ldarg.0
         IL_0001: newobj instance void 'Submission#0'::.ctor(object[])

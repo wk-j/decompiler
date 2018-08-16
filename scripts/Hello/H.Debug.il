@@ -6,6 +6,38 @@
     extends [System.Private.CoreLib]System.Object
 {
     // Nested Types
+    .class nested public auto ansi beforefieldinit P
+        extends [System.Private.CoreLib]System.Object
+    {
+        // Methods
+        .method private hidebysig 
+            instance void Main () cil managed 
+        {
+            // Method begins at RVA 0x20b2
+            // Code size 12 (0xc)
+            .maxstack 8
+
+            IL_0000: ldstr "Hello"
+            IL_0005: call void [System.Console]System.Console::WriteLine(string)
+            IL_000a: nop
+            IL_000b: ret
+        } // end of method P::Main
+
+        .method public hidebysig specialname rtspecialname 
+            instance void .ctor () cil managed 
+        {
+            // Method begins at RVA 0x20bf
+            // Code size 8 (0x8)
+            .maxstack 8
+
+            IL_0000: ldarg.0
+            IL_0001: call instance void [System.Private.CoreLib]System.Object::.ctor()
+            IL_0006: nop
+            IL_0007: ret
+        } // end of method P::.ctor
+
+    } // end of class P
+
     .class nested public auto ansi sealed beforefieldinit '<<Initialize>>d__0'
         extends [System.Private.CoreLib]System.Object
         implements [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine
@@ -19,7 +51,7 @@
         .method public hidebysig specialname rtspecialname 
             instance void .ctor () cil managed 
         {
-            // Method begins at RVA 0x20b2
+            // Method begins at RVA 0x20bf
             // Code size 8 (0x8)
             .maxstack 8
 
@@ -33,7 +65,7 @@
             instance void MoveNext () cil managed 
         {
             .override method instance void [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine::MoveNext()
-            // Method begins at RVA 0x20bc
+            // Method begins at RVA 0x20c8
             // Code size 68 (0x44)
             .maxstack 2
             .locals init (
@@ -89,7 +121,7 @@
                 01 00 00 00
             )
             .override method instance void [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine::SetStateMachine(class [System.Private.CoreLib]System.Runtime.CompilerServices.IAsyncStateMachine)
-            // Method begins at RVA 0x211c
+            // Method begins at RVA 0x2128
             // Code size 1 (0x1)
             .maxstack 8
 

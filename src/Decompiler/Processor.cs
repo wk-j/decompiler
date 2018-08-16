@@ -74,10 +74,10 @@ class Processor {
         };
 
         var all = references.Concat(GetReferences());
+
         var usings = GetUsings();
         var options = ScriptOptions.Default
             .WithImports(usings)
-            //.WithEmitDebugInformation(level == OptimizationLevel.Debug ? true : false)
             .WithReferences(references);
 
         var script = CSharpScript.Create(tree.ToString(), options);
@@ -92,7 +92,12 @@ class Processor {
     private static void SetReleaseOptimizationLevel(Compilation compilation) {
         var compilationOptionsField = typeof(CSharpCompilation).GetTypeInfo().GetDeclaredField("_options");
         var compilationOptions = (CSharpCompilationOptions)compilationOptionsField.GetValue(compilation);
-        compilationOptions = compilationOptions.WithOptimizationLevel(OptimizationLevel.Release);
+        compilationOptions =
+            compilationOptions
+                .WithMainTypeName("Program")
+                .WithOutputKind(OutputKind.ConsoleApplication)
+                .WithOptimizationLevel(OptimizationLevel.Release);
+
         compilationOptionsField.SetValue(compilation, compilationOptions);
     }
 
@@ -155,7 +160,7 @@ class Processor {
                 DecompileDllToIl(dllPath, ilPath);
             }
         }
-        // DecopmileDllToCs(dllPath, Path.ChangeExtension(csPath, $".Source.cake"));
+        DecopmileDllToCs(dllPath, Path.ChangeExtension(csPath, $".Source.cake"));
         File.Delete(dllPath);
 
         return "";
