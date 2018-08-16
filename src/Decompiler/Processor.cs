@@ -38,9 +38,9 @@ class Processor {
             "System.Collections.Generic",
             "System.Console",
             "System.Diagnostics",
-            // "System.Dynamic",
+            "System.Dynamic",
             "System.Linq",
-            // "System.Linq.Expressions",
+            "System.Linq.Expressions",
             "System.Text",
             "System.Threading.Tasks"
         );
@@ -53,14 +53,13 @@ class Processor {
             MetadataReference.CreateFromFile(typeof(Object).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
         };
+
         var all = references.Concat(GetReferences());
-        var usings = GetUsings();
         var com = CSharpCompilation.Create(
             "Hello",
             syntaxTrees: new[] { tree },
             references: all,
             options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
-                .WithScriptClassName("Hello")
                 .WithOptimizationLevel(level)
         );
         return com;
@@ -134,8 +133,9 @@ class Processor {
     }
 
     private void DecopmileDllToCs(string dllFile, string csPath) {
-        var dec = new CSharpDecompiler(dllFile, new DecompilerSettings());
-        //var name = new FullTypeName("Submission#0");
+        var dec = new CSharpDecompiler(dllFile, new DecompilerSettings {
+            AsyncAwait = true
+        });
         var rs = dec.DecompileWholeModuleAsString();
         File.WriteAllText(csPath, rs);
     }
