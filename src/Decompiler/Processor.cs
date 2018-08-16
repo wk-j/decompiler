@@ -39,7 +39,7 @@ class Processor {
             "System.Console",
             "System.Diagnostics",
             // "System.Dynamic",
-            // "System.Linq",
+            "System.Linq",
             // "System.Linq.Expressions",
             "System.Text",
             "System.Threading.Tasks"
@@ -62,7 +62,6 @@ class Processor {
             options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
                 .WithScriptClassName("Hello")
                 .WithOptimizationLevel(level)
-                .WithUsings(usings)
         );
         return com;
     }
@@ -71,6 +70,7 @@ class Processor {
         var references = new MetadataReference[] {
             MetadataReference.CreateFromFile(typeof(Object).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
         };
 
         var all = references.Concat(GetReferences());
@@ -120,6 +120,14 @@ class Processor {
     private bool CreateDllFromCs(string csFile, string outputPath, OptimizationLevel level) {
         var code = File.ReadAllText(csFile);
         var tree = Parse(code);
+        var compile = CompileCSharp(tree, level);
+        var (ok, _) = CreateDll(compile, outputPath);
+        return ok;
+    }
+
+    private bool CreateDllFromScript(string csFile, string outputPath, OptimizationLevel level) {
+        var code = File.ReadAllText(csFile);
+        var tree = Parse(code);
         var compile = CompileScript(tree, level);
         var (ok, _) = CreateDll(compile, outputPath);
         return ok;
@@ -127,8 +135,8 @@ class Processor {
 
     private void DecopmileDllToCs(string dllFile, string csPath) {
         var dec = new CSharpDecompiler(dllFile, new DecompilerSettings());
-        var name = new FullTypeName("Submission#0");
-        var rs = dec.DecompileTypeAsString(name);
+        //var name = new FullTypeName("Submission#0");
+        var rs = dec.DecompileWholeModuleAsString();
         File.WriteAllText(csPath, rs);
     }
 
