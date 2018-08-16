@@ -2,5 +2,5 @@
 
 ```
 dotnet install tool -g wk.Decompiler
-wk-decompiler scripts/Hello.csx
+wk-decompiler scripts/Hello/H.csx
 ```

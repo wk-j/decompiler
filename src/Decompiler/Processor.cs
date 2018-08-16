@@ -11,6 +11,7 @@ using ICSharpCode.Decompiler.Metadata;
 using ICSharpCode.Decompiler.TypeSystem;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 class Processor {
     private Microsoft.CodeAnalysis.SyntaxTree Parse(string code) {
@@ -26,7 +27,7 @@ class Processor {
         return refs;
     }
 
-    private CSharpCompilation CompileTree(Microsoft.CodeAnalysis.SyntaxTree tree) {
+    private CSharpCompilation CompileTree(Microsoft.CodeAnalysis.SyntaxTree tree, OptimizationLevel level) {
         var references = new MetadataReference[] {
             MetadataReference.CreateFromFile(typeof(Object).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
@@ -39,6 +40,7 @@ class Processor {
             syntaxTrees: new[] { tree },
             references: all,
             options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                .WithOptimizationLevel(level)
         );
         return com;
     }
@@ -59,10 +61,10 @@ class Processor {
         }
     }
 
-    private bool CreateDllFromCs(string csFile, string outputPath) {
+    private bool CreateDllFromCs(string csFile, string outputPath, OptimizationLevel level) {
         var code = File.ReadAllText(csFile);
         var tree = Parse(code);
-        var compile = CompileTree(tree);
+        var compile = CompileTree(tree, level);
         var (ok, _) = CreateDll(compile, outputPath);
         return ok;
     }
@@ -86,14 +88,20 @@ class Processor {
     }
 
     public string ConvertCsToIl(String csPath) {
-        var dllPath = Path.ChangeExtension(csPath, "dll");
-        var ilPath = Path.ChangeExtension(csPath, ".il");
-        var text = File.CreateText(ilPath);
-        var ok = CreateDllFromCs(csPath, dllPath);
-        if (ok) {
-            DecompileDllToIl(dllPath, ilPath);
-            File.Delete(dllPath);
-            return ilPath;
+        var levels = new[] {
+            OptimizationLevel.Debug,
+            OptimizationLevel.Release
+        };
+
+        foreach (var item in levels) {
+            var dllPath = Path.ChangeExtension(csPath, "dll");
+            var ilPath = Path.ChangeExtension(csPath, $".{item}.il");
+            var text = File.CreateText(ilPath);
+            var ok = CreateDllFromCs(csPath, dllPath, item);
+            if (ok) {
+                DecompileDllToIl(dllPath, ilPath);
+                File.Delete(dllPath);
+            }
         }
         return "";
     }
