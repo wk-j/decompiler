@@ -1,0 +1,21 @@
+# ASP.NET Core
+# Build and test ASP.NET Core web applications targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/vsts/pipelines/languages/dotnet-core
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  project: 'src/Decompiler/Decompiler.csproj'
+  buildConfiguration: 'Release'
+  version: '0.1.1'
+
+steps:
+- script: dotnet build $(project)
+  displayName: "Build Project"
+
+- script: dotnet pack $(project) --configuration $(buildConfiguration) /p:PackageVersion=$(version) --output $(Build.ArtifactStagingDirectory)
+  displayName: 'Pack NuGet'
+
+- task: PublishBuildArtifacts@1
